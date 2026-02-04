@@ -30,20 +30,6 @@ jobs:
           composer validate --no-check-publish
           composer install --no-interaction --no-dev --prefer-dist --no-progress --optimize-autoloader
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Build assets (Vite)
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci --no-audit --no-fund
-          else
-            npm install --no-audit --no-fund
-          fi
-          npm run build
-
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
