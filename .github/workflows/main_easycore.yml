@@ -81,5 +81,6 @@ jobs:
         with:
           app-name: 'easycore'
           slot-name: 'Production'
-          package: .
+          package: 'php-app'
+          clean: true
           
