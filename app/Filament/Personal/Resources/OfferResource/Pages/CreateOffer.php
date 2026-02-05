@@ -12,7 +12,6 @@ use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 
 class CreateOffer extends CreateRecord
 {
@@ -39,7 +38,7 @@ class CreateOffer extends CreateRecord
         $attachments = [];
         if (!empty($this->record->offer_files)) {
             foreach ($this->record->offer_files as $filePath) {
-                $attachments[] = Storage::disk('public')->path($filePath);
+                $attachments[] = $filePath;
             }
         }
 
@@ -55,6 +54,7 @@ class CreateOffer extends CreateRecord
                 'customer_national_id'  => $customer?->national_id,
                 'offer_amount'          => $amount,
                 'attachments'           => $attachments,
+                'attachments_disk'      => config('filesystems.default'),
                 'url'                   => FilamentUrlHelper::getResourceUrl(
                     $destinatario, // the recipient
                     OfferResource::class,
@@ -76,6 +76,7 @@ class CreateOffer extends CreateRecord
                 'customer_national_id'  => $customer?->national_id,
                 'offer_amount'          => $amount,
                 'attachments'           => $attachments,
+                'attachments_disk'      => config('filesystems.default'),
                 'url'                   => FilamentUrlHelper::getResourceUrl(
                     $solicitante,
                     OfferResource::class,

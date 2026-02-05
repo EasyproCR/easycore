@@ -95,6 +95,8 @@ class ProjectResource extends Resource
                             ->label(__('translate.project.attachments'))
                             ->multiple()
                             ->downloadable()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('proyectos/' .now()->format('Y/m/d'))
                             ->maxFiles(5),
                     ])

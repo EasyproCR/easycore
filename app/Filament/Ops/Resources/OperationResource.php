@@ -94,6 +94,8 @@ class OperationResource extends Resource
                     FileUpload::make('attachments')
                         ->directory('attachments/' . now()->format('Y/m/d'))
                         ->label(__('translate.operation.attachments'))
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->columnSpanFull()
                         ->downloadable(),
                 ]),

@@ -67,6 +67,8 @@ class DocumentResource extends Resource
                         ->directory('images/' . now()->format('Y/m/d'))
                         ->label(__('translate.document.image'))
                         ->image()
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->downloadable(),
                 ]),
             ]);
@@ -84,7 +86,7 @@ class DocumentResource extends Resource
                     ->label(__('translate.document.description'))
                     ->alignCenter(),
                 ImageColumn::make('image')
-                    ->disk('public')
+                    ->disk('azure_public')
                     ->label(__('translate.document.image'))
                     ->alignCenter(),
             ])

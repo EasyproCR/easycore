@@ -134,6 +134,8 @@ class OfferResource extends Resource
                             ->label(__('translate.offer.offer_files'))
                             ->multiple()
                             ->columnSpanFull()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->downloadable()
                             ->directory('attachments/' . now()->format('Y/m/d'))
                             ->maxFiles(5),

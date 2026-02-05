@@ -114,7 +114,8 @@ class OfferResource extends Resource
                             ->label(__('translate.offer.rejection_reason'))
                             ->visible(fn(Get $get): bool => $get('offer_status') == 'rejected')
                             ->disabled(),
-                        $lock(FileUpload::make('offer_files')->label(__('translate.offer.offer_files'))->multiple()->downloadable()->directory('attachments/' . now()->format('Y/m/d'))->maxFiles(5)),
+                        $lock(FileUpload::make('offer_files')->label(__('translate.offer.offer_files'))->multiple()->downloadable() ->disk('azure_public')
+                            ->visibility('public') ->directory('attachments/' . now()->format('Y/m/d'))->maxFiles(5)),
                     ]),
             ]);
     }

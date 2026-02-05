@@ -99,6 +99,8 @@ class ProjectResource extends Resource
                             ->multiple()
                             ->columnSpan(2)
                             ->downloadable()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('proyectos/' .now()->format('Y/m/d'))
                             ->maxFiles(5),
                     ])

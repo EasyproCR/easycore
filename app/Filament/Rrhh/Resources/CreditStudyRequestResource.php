@@ -143,6 +143,8 @@ class CreditStudyRequestResource extends Resource
                             ->multiple()
                             ->visible(fn (Get $get): bool => $get('request_status') == 'approved')
                             ->downloadable()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('credit_study_requests/' .now()->format('Y-m-d'))
                             ->maxFiles(5),
                     ]),

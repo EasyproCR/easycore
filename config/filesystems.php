@@ -1,5 +1,21 @@
 <?php
 
+$azureConnectionString = env('AZURE_STORAGE_CONNECTION_STRING');
+$azureContainer = env('AZURE_STORAGE_CONTAINER', 'public');
+
+$azureStorageUrl = env('AZURE_STORAGE_URL');
+if (! $azureStorageUrl && is_string($azureConnectionString)) {
+    preg_match('/AccountName=([^;]+)/', $azureConnectionString, $accountMatch);
+    preg_match('/EndpointSuffix=([^;]+)/', $azureConnectionString, $suffixMatch);
+
+    $accountName = $accountMatch[1] ?? null;
+    $endpointSuffix = $suffixMatch[1] ?? 'core.windows.net';
+
+    if (is_string($accountName) && $accountName !== '') {
+        $azureStorageUrl = "https://{$accountName}.blob.{$endpointSuffix}/{$azureContainer}";
+    }
+}
+
 return [
 
     /*
@@ -13,7 +29,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'azure_public'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,6 +72,19 @@ return [
             'throw' => false,
         ],
 
+        'azure_public' => [
+            'driver' => 'azure-storage-blob',
+            'connection_string' => env('AZURE_STORAGE_CONNECTION_STRING'),
+            'container' => env('AZURE_STORAGE_CONTAINER', 'public'),
+
+            // Used by some UI components (e.g. FileUpload previews).
+            // If AZURE_STORAGE_URL is not set, we derive it from the connection string.
+            'url' => $azureStorageUrl,
+
+            'prefix' => env('AZURE_STORAGE_PREFIX'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
     ],
 
     /*

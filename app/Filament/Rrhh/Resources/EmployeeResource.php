@@ -128,9 +128,13 @@ class EmployeeResource extends Resource
                         ->acceptedFileTypes(['application/pdf'])
                         ->directory('credids/' .now()->format('Y/m/d'))
                         ->downloadable()
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->columnSpan(2),
                     Forms\Components\FileUpload::make('contract')
                         ->label('Contrato')
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->acceptedFileTypes(['application/pdf'])
                         ->directory('attachments/contract/' .now()->format('Y/m/d'))
                         ->downloadable(),

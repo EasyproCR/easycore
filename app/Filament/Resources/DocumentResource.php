@@ -65,6 +65,8 @@ class DocumentResource extends Resource
                         ->directory('images/' . now()->format('Y/m/d'))
                         ->label(__('translate.document.image'))
                         ->image()
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->downloadable(),
                 ]),
             ]);

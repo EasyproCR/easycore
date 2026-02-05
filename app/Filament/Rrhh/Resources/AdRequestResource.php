@@ -99,6 +99,8 @@ class AdRequestResource extends Resource
                             ->multiple()
                             ->columnSpanFull()
                             ->downloadable()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('pautas/' . now()->format('Y/m/d'))
                             ->maxFiles(5),
                     ]),

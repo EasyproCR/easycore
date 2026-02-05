@@ -133,6 +133,8 @@ class OfferResource extends Resource
                             ->multiple()
                             ->columnSpanFull()
                             ->downloadable()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('attachments/' . now()->format('Y/m/d'))
                             ->maxFiles(5),
                     ]),

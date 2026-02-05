@@ -106,6 +106,8 @@ class PropertyAssignmentResource extends Resource
                         ->directory('property_assignments/' .now()->format('Y/m/d'))
                         ->downloadable()
                         ->minFiles(1)
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->maxFiles(10),
                 ]),
             ]);

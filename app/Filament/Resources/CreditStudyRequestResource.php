@@ -143,6 +143,8 @@ class CreditStudyRequestResource extends Resource
                         FileUpload::make('documents')
                             ->label(__('translate.credit_request.documents'))
                             ->multiple()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->visible(fn (Get $get): bool => $get('request_status') == 'approved')
                             ->downloadable()
                             ->directory('credit_study_requests/' .now()->format('Y-m-d'))

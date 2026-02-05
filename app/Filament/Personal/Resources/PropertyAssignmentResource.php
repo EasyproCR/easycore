@@ -111,7 +111,8 @@ class PropertyAssignmentResource extends Resource
 
                 Section::make(__('resources.property_assignment.sectionImages'))
                     ->schema([
-                        $lock(FileUpload::make('property_images')->label(__('translate.property_assignment.property_images'))->multiple()->image()->directory('property_assignments/' . now()->format('Y/m/d'))->downloadable()->minFiles(1)->maxFiles(10))->required(),
+                        $lock(FileUpload::make('property_images')->label(__('translate.property_assignment.property_images'))->multiple()->image()->directory('property_assignments/' . now()->format('Y/m/d')) ->disk('azure_public')
+                            ->visibility('public') ->downloadable()->minFiles(1)->maxFiles(10))->required(),
                     ])
             ]);
     }

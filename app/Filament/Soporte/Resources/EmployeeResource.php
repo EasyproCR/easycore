@@ -128,6 +128,8 @@ class EmployeeResource extends Resource
                         ->acceptedFileTypes(['application/pdf'])
                         ->directory('credids/' .now()->format('Y/m/d'))
                         ->downloadable()
+                        ->disk('azure_public')
+                        ->visibility('public')
                         ->columnSpan(2),
                 ]),
 

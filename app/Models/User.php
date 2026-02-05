@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements HasAvatar
 {
@@ -54,7 +55,13 @@ class User extends Authenticatable implements HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return asset('storage/' . $this->avatar_url);
+        if (! $this->avatar_url) {
+            return null;
+        }
+
+        $disk = config('filament-edit-profile.disk', config('filesystems.default'));
+
+        return Storage::disk($disk)->url($this->avatar_url);
     }
 
     public function employee()

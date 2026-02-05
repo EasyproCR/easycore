@@ -88,6 +88,8 @@ class BillingControlResource extends Resource
                         FileUpload::make('invoice_files')
                             ->label(__('translate.billing_control.invoice_files'))
                             ->multiple()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->downloadable()
                             ->directory('facturas/' .now()->format('Y/m/d'))
                             ->maxFiles(5),

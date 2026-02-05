@@ -95,6 +95,8 @@ class AdRequestResource extends Resource
                             ->label(__('translate.ad_request.payment_receipt'))
                             ->multiple()
                             ->columnSpanFull()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->downloadable()
                             ->directory('pautas/' . now()->format('Y/m/d'))
                             ->maxFiles(5),

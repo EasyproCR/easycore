@@ -104,6 +104,8 @@ class PropertyAssignmentResource extends Resource
                             ->label(__('translate.property_assignment.property_images'))
                             ->multiple()
                             ->image()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('property_assignments/' .now()->format('Y/m/d'))
                             ->downloadable()
                             ->minFiles(1)

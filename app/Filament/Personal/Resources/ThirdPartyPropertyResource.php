@@ -200,9 +200,11 @@ class ThirdPartyPropertyResource extends Resource
                 Section::make('Adjuntos')
                     ->columns(12)
                     ->schema([
-                        FileUpload::make('contract_path')->label('Contrato (PDF/JPEG/PNG)')->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])->directory('tdp/contracts/' . now()->format('Y/m/d'))->preserveFilenames()->downloadable()->required()->columnSpan(6),
+                        FileUpload::make('contract_path')->label('Contrato (PDF/JPEG/PNG)')->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])->directory('tdp/contracts/' . now()->format('Y/m/d')) ->disk('azure_public')
+                            ->visibility('public') ->preserveFilenames()->downloadable()->required()->columnSpan(6),
 
-                        FileUpload::make('registry_study_path')->label('Estudio de registro (PDF/JPEG/PNG)')->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])->directory('tdp/registry/' . now()->format('Y/m/d'))->preserveFilenames()->downloadable()->required()->columnSpan(6),
+                        FileUpload::make('registry_study_path')->label('Estudio de registro (PDF/JPEG/PNG)')->acceptedFileTypes(['application/pdf', 'image/jpeg', 'image/png'])->directory('tdp/registry/' . now()->format('Y/m/d'))->disk('azure_public')
+                            ->visibility('public') ->preserveFilenames()->downloadable()->required()->columnSpan(6),
                     ]),
             ]);
     }

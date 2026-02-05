@@ -95,6 +95,8 @@ class BillingControlResource extends Resource
                             ->label(__('translate.billing_control.invoice_files'))
                             ->multiple()
                             ->downloadable()
+                            ->disk('azure_public')
+                            ->visibility('public')
                             ->directory('facturas/' .now()->format('Y/m/d'))
                             ->maxFiles(5)
                             ->disabled(),
