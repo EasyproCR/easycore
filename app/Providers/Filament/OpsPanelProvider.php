@@ -29,7 +29,7 @@ class OpsPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->favicon(asset('images/favicon.ico'))
+            ->favicon(config('app.env') === 'production' ? secure_asset('images/favicon.ico') : asset('images/favicon.ico'))
             ->id('ops')
             ->path('ops')
             ->login()
