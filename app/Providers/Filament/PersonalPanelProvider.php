@@ -31,7 +31,7 @@ class PersonalPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->favicon(config('app.env') === 'production' ? secure_asset('images/favicon.ico') : asset('images/favicon.ico'))
+            ->favicon(asset('images/favicon.ico'))
             ->id('personal')
             ->path('personal')
             ->login()
