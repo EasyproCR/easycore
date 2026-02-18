@@ -12,12 +12,45 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements HasAvatar
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use Billable;
     use HasRoles;
     use HasPanelShield;
+
+    protected static function booted()
+    {
+        $codeGenerator = function ($user) {
+            if ($user->country_id) {
+                $country = \App\Models\Country::find($user->country_id);
+                if ($country) {
+                    $iso = $country->iso2 ?? 'XX';
+                    // Use ID or fallback to 0000 if ID not set yet (should be set on created/updated)
+                    $user->code = 'EP-' . strtoupper($iso) . '-' . str_pad($user->id, 4, '0', STR_PAD_LEFT);
+                }
+            }
+        };
+
+        static::created(function ($user) use ($codeGenerator) {
+            $codeGenerator($user);
+            if ($user->isDirty('code')) {
+                $user->saveQuietly();
+            }
+        });
+
+        static::updated(function ($user) use ($codeGenerator) {
+            // Only regenerate if country_id changed or code is missing
+            if ($user->isDirty('country_id') || empty($user->code)) {
+                $codeGenerator($user);
+                if ($user->isDirty('code')) {
+                    $user->saveQuietly();
+                }
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -25,10 +58,12 @@ class User extends Authenticatable implements HasAvatar
      * @var array<int, string>
      */
     protected $fillable = [
+        'code',
         'name',
         'email',
         'state',
         'password',
+        'country_id',
         'email_verified_at',
         'avatar_url',
     ];
@@ -55,13 +90,16 @@ class User extends Authenticatable implements HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        if (! $this->avatar_url) {
+        $avatar = $this->avatar_url;
+
+        if (!$avatar) {
             return null;
         }
 
-        $disk = config('filament-edit-profile.disk', config('filesystems.default'));
+        /** @var string $disk */
+        $disk = config('filament-edit-profile.disk', 'public');
 
-        return Storage::disk($disk)->url($this->avatar_url);
+        return Storage::disk($disk)->url($avatar);
     }
 
     public function employee()
@@ -152,5 +190,10 @@ class User extends Authenticatable implements HasAvatar
     public function financialControls()
     {
         return $this->hasMany(FinancialControl::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }

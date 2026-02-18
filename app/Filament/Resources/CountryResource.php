@@ -26,6 +26,8 @@ class CountryResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required(),
+                Forms\Components\TextInput::make('iso2')
+                    ->required(),
                 Forms\Components\TextInput::make('numeric_code'),
                 Forms\Components\TextInput::make('phonecode')
                     ->tel(),
@@ -40,6 +42,9 @@ class CountryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('iso2')
+                    ->alignCenter()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('numeric_code')
                     ->alignCenter()

@@ -83,6 +83,10 @@ class PersonalPanelProvider extends PanelProvider
                 ->restrictedRoles(['panel_user', 'super_admin', 'soporte', 'ventas', 'servicio_al_cliente', 'rrhh', 'contabilidad', 'gerente']),
                 FilamentApexChartsPlugin::make(),
                 FilamentEditProfilePlugin::make()
+                    ->shouldShowEditProfileForm(false)
+                    ->customProfileComponents([
+                        \App\Livewire\CustomEditProfileForm::class,
+                    ])
                     ->setIcon('heroicon-o-user')
                     ->shouldShowAvatarForm()
                     ->setNavigationGroup(__('resources.app.navigation_group'))
