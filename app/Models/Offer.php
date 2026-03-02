@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCountry;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Parallax\FilamentComments\Models\Traits\HasFilamentComments;
 
 class Offer extends Model
 {
+    use BelongsToCountry;
+
     use HasFactory;
     use HasFilamentComments;
 

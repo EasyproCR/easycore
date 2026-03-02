@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCountry;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +12,8 @@ use Parallax\FilamentComments\Models\Traits\HasFilamentComments;
 
 class ThirdPartyProperty extends Model
 {
+    use BelongsToCountry;
+
     use HasFactory, SoftDeletes, HasFilamentComments;
 
     protected $fillable = [

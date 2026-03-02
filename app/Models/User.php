@@ -14,12 +14,15 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Cashier\Billable;
 
+use App\Models\Traits\BelongsToCountry;
+
 class User extends Authenticatable implements HasAvatar
 {
     use HasApiTokens, HasFactory, Notifiable;
     use Billable;
     use HasRoles;
     use HasPanelShield;
+    use BelongsToCountry;
 
     protected static function booted()
     {
