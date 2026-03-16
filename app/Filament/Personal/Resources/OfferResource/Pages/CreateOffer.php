@@ -54,7 +54,7 @@ class CreateOffer extends CreateRecord
                 'customer_national_id'  => $customer?->national_id,
                 'offer_amount'          => $amount,
                 'attachments'           => $attachments,
-                'attachments_disk'      => config('filesystems.default'),
+                'attachments_disk'      => 'azure_public',
                 'url'                   => FilamentUrlHelper::getResourceUrl(
                     $destinatario, // the recipient
                     OfferResource::class,
@@ -76,7 +76,7 @@ class CreateOffer extends CreateRecord
                 'customer_national_id'  => $customer?->national_id,
                 'offer_amount'          => $amount,
                 'attachments'           => $attachments,
-                'attachments_disk'      => config('filesystems.default'),
+                'attachments_disk'      => 'azure_public',
                 'url'                   => FilamentUrlHelper::getResourceUrl(
                     $solicitante,
                     OfferResource::class,

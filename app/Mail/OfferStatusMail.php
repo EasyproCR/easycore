@@ -68,9 +68,10 @@ class OfferStatusMail extends Mailable
     public function attachments(): array
     {
         $attachments = [];
+        $disk = $this->data['attachments_disk'] ?? config('filesystems.default');
 
         foreach ($this->data['attachments'] ?? [] as $filePath) {
-            $attachments[] = Attachment::fromPath($filePath);
+            $attachments[] = Attachment::fromStorageDisk($disk, $filePath);
         }
 
         return $attachments;
