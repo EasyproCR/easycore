@@ -69,4 +69,9 @@ class AdminReminder extends Model
     {
         return $this->hasMany(AdminReminderRun::class);
     }
+
+    public function activityResults(): HasMany
+    {
+        return $this->hasMany(AdminReminderResult::class);
+    }
 }

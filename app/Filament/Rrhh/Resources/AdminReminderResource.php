@@ -160,7 +160,7 @@ class AdminReminderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\Resources\AdminReminderResource\RelationManagers\ActivityResultsRelationManager::class,
         ];
     }
 
