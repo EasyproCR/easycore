@@ -9,4 +9,11 @@ use Filament\Resources\Pages\ListRecords;
 class ListBillingControls extends ListRecords
 {
     protected static string $resource = BillingControlResource::class;
+
+    public function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
 }
