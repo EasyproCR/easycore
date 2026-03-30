@@ -28,5 +28,5 @@ Route::prefix('ad-requests')->name('ad-requests.')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/personal/easychat', [\App\Http\Controllers\EasyChatController::class, 'redirect'])->name('easychat');
+    Route::get('/easychat-redirect', [\App\Http\Controllers\EasyChatController::class, 'redirect'])->name('easychat');
 });

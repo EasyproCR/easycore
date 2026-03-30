@@ -52,10 +52,10 @@ class PersonalPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->navigationItems([
-                NavigationItem::make('EVA')
-                    ->icon('heroicon-o-chat-bubble-bottom-center-text')
-                    ->url('/personal/easychat', true)
-                    ->sort(999),
+                // NavigationItem::make('EVA')
+                //     ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                //     ->url('/personal/easychat', true)
+                //     ->sort(999),
             ])
             ->discoverWidgets(in: app_path('Filament/Personal/Widgets'), for: 'App\\Filament\\Personal\\Widgets')
             ->widgets([
@@ -79,8 +79,8 @@ class PersonalPanelProvider extends PanelProvider
             ])
             ->plugins([
                 PanelRoles::make()
-                ->roleToAssign('panel_user')
-                ->restrictedRoles(['panel_user', 'super_admin', 'soporte', 'ventas', 'servicio_al_cliente', 'rrhh', 'contabilidad', 'gerente']),
+                    ->roleToAssign('panel_user')
+                    ->restrictedRoles(['panel_user', 'super_admin', 'soporte', 'ventas', 'servicio_al_cliente', 'rrhh', 'contabilidad', 'gerente']),
                 FilamentApexChartsPlugin::make(),
                 FilamentEditProfilePlugin::make()
                     ->shouldShowEditProfileForm(false)
@@ -100,16 +100,18 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de Administración')
                     ->url('/admin')
                     ->icon('heroicon-o-cog-6-tooth')
-                    ->visible(function (){
-                        if(auth()->user()){
-                            if(auth()->user()?->hasAnyRole([
-                                'super_admin'
-                            ])){
+                    ->visible(function () {
+                        if (auth()->user()) {
+                            if (
+                                auth()->user()?->hasAnyRole([
+                                    'super_admin'
+                                ])
+                            ) {
                                 return true;
-                            }else{
+                            } else {
                                 return false;
                             }
-                        }else{
+                        } else {
                             return false;
                         }
                         ;
@@ -119,7 +121,7 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de Soporte')
                     ->url('/soporte')
                     ->icon('heroicon-o-check-badge')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'soporte',
                     ])),
 
@@ -127,7 +129,7 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de RRHH')
                     ->url('/rrhh')
                     ->icon('heroicon-o-cursor-arrow-ripple')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'rrhh',
                     ])),
 
@@ -135,7 +137,7 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de Ventas')
                     ->url('/sales')
                     ->icon('heroicon-o-currency-dollar')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'ventas',
                     ])),
 
@@ -143,7 +145,7 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de Gerencia')
                     ->url('/ops')
                     ->icon('heroicon-o-server')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'gerente',
                     ])),
 
@@ -151,7 +153,7 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de Servicio al Cliente')
                     ->url('/services')
                     ->icon('heroicon-o-check-badge')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'servicio_al_cliente',
                     ])),
 
@@ -160,11 +162,11 @@ class PersonalPanelProvider extends PanelProvider
                     ->label('Panel de Contabilidad')
                     ->url('/contabilidad')
                     ->icon('heroicon-o-document-currency-dollar')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'contabilidad',
                     ])),
             ])
-            ;
+        ;
 
     }
 
@@ -173,7 +175,7 @@ class PersonalPanelProvider extends PanelProvider
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['es','en']); // also accepts a closure
+                ->locales(['es', 'en']); // also accepts a closure
         });
 
     }

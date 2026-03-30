@@ -80,9 +80,13 @@ class RrhhPanelProvider extends PanelProvider
                     ->label('Panel personal')
                     ->url('/personal')
                     ->icon('heroicon-o-cog-6-tooth')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'rrhh',
                     ])),
-            ]);
+            ])
+            ->renderHook(
+                'panels::body.end',
+                fn(): \Illuminate\Contracts\View\View => view('components.eva-widget'),
+            );
     }
 }
