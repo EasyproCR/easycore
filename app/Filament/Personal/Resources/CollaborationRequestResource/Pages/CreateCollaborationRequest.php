@@ -28,23 +28,44 @@ class CreateCollaborationRequest extends CreateRecord
         $record = $this->record;
         $customer = PersonalCustomer::find($record->personal_customer_id);
         $solicitante = $record->user;
-        $admins = User::role(['ventas', 'servicio_al_cliente', 'rrhh'])->get();
+        $iso2 = $solicitante?->country?->iso2;
 
-        foreach ($admins as $admin) {
+        if ($iso2 === 'PA' || $iso2 === 'SV') {
+            $supportEmail = $iso2 === 'PA' ? 'kathia.garcia@g-easypro.com' : 'maria.castillo@g-easypro.com';
+
             $dataToSend = [
                 'customer'        => $customer?->full_name,
                 'client_budget'   => $record->client_budget,
                 'name'            => $solicitante->name,
                 'email'           => $solicitante->email,
-                'url'             => FilamentUrlHelper::getResourceUrl(
-                    $admin,
+                'url'             => FilamentUrlHelper::getResourceUrlForPanel(
+                    'soporte',
                     CollaborationRequestResource::class,
                     $record,
                 ),
             ];
 
-            Mail::to(new Address($admin->email))
+            Mail::to(new Address($supportEmail))
                 ->send(new CollabNotification($dataToSend));
+        } else {
+            $admins = User::role(['ventas', 'servicio_al_cliente', 'rrhh'])->get();
+
+            foreach ($admins as $admin) {
+                $dataToSend = [
+                    'customer'        => $customer?->full_name,
+                    'client_budget'   => $record->client_budget,
+                    'name'            => $solicitante->name,
+                    'email'           => $solicitante->email,
+                    'url'             => FilamentUrlHelper::getResourceUrl(
+                        $admin,
+                        CollaborationRequestResource::class,
+                        $record,
+                    ),
+                ];
+
+                Mail::to(new Address($admin->email))
+                    ->send(new CollabNotification($dataToSend));
+            }
         }
 
         if ($solicitante && $solicitante->hasRole('panel_user')) {

@@ -35,11 +35,20 @@ class CreatePropertyAssignment extends CreateRecord
             'email' => $user?->email,
         ];
 
-        $userRoles = User::role('servicio_al_cliente')->pluck('email')->unique()->toArray();
+        $iso2 = $user?->country?->iso2;
 
-        if (!empty($userRoles)) {
-            Mail::to(array_map(fn($email) => new Address($email), $userRoles))
+        if ($iso2 === 'PA' || $iso2 === 'SV') {
+            $supportEmail = $iso2 === 'PA' ? 'kathia.garcia@g-easypro.com' : 'maria.castillo@g-easypro.com';
+
+            Mail::to(new Address($supportEmail))
                 ->send(new PropertyPending($dataToSend));
+        } else {
+            $userRoles = User::role('servicio_al_cliente')->pluck('email')->unique()->toArray();
+
+            if (!empty($userRoles)) {
+                Mail::to(array_map(fn($email) => new Address($email), $userRoles))
+                    ->send(new PropertyPending($dataToSend));
+            }
         }
     }
 }

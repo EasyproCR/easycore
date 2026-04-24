@@ -80,7 +80,7 @@ class PersonalPanelProvider extends PanelProvider
             ->plugins([
                 PanelRoles::make()
                     ->roleToAssign('panel_user')
-                    ->restrictedRoles(['panel_user', 'super_admin', 'soporte', 'ventas', 'servicio_al_cliente', 'rrhh', 'contabilidad', 'gerente']),
+                    ->restrictedRoles(['panel_user', 'super_admin', 'soporte', 'ventas', 'servicio_al_cliente', 'rrhh', 'contabilidad', 'gerente', 'gerente_regional']),
                 FilamentApexChartsPlugin::make(),
                 FilamentEditProfilePlugin::make()
                     ->shouldShowEditProfileForm(false)
@@ -165,6 +165,15 @@ class PersonalPanelProvider extends PanelProvider
                     ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'contabilidad',
                     ])),
+
+                MenuItem::make()
+                    ->label('Panel de Gerencia Regional')
+                    ->url('/gerente')
+                    ->icon('heroicon-o-server')
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
+                        'gerente_regional',
+                    ])),
+
             ])
         ;
 

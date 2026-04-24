@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCountry;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Parallax\FilamentComments\Models\Traits\HasFilamentComments;
@@ -10,8 +11,10 @@ class OrganizationContact extends Model
 {
     use HasFactory;
     use HasFilamentComments;
+    use BelongsToCountry;
 
     protected $fillable = [
+        'country_id',
         'organization_id',
         'contact_type',
         'contact_name',

@@ -42,10 +42,12 @@ class CreateOffer extends CreateRecord
             }
         }
 
-        // administrative users (primary recipients)
-        $userRol = User::role(['soporte', 'ventas', 'servicio_al_cliente', 'gerente'])->get();
+        $iso2 = $solicitante?->country?->iso2;
 
-        foreach ($userRol as $destinatario) {
+        if ($iso2 === 'PA' || $iso2 === 'SV') {
+            $supportEmail = $iso2 === 'PA' ? 'soportepa@g-easypro.com' : 'soportesv@g-easypro.com';
+
+            // primary recipient (PA or SV)
             $dataToSend = [
                 'property'              => $record->property_name,
                 'organization'          => $organization?->organization_name,
@@ -55,15 +57,53 @@ class CreateOffer extends CreateRecord
                 'offer_amount'          => $amount,
                 'attachments'           => $attachments,
                 'attachments_disk'      => 'azure_public',
-                'url'                   => FilamentUrlHelper::getResourceUrl(
-                    $destinatario, // the recipient
+                'url'                   => FilamentUrlHelper::getResourceUrlForPanel(
+                    'soporte',
                     OfferResource::class,
                     $record,
                 ),
             ];
 
-            Mail::to(new Address($destinatario->email))
+            Mail::to(new Address($supportEmail))
                 ->send(new OfferStatusMail($dataToSend, 'pending'));
+        } else {
+            // administrative users (primary recipients)
+            $userRol = User::role(['soporte', 'ventas', 'servicio_al_cliente', 'gerente'])->get();
+
+            foreach ($userRol as $destinatario) {
+                $dataToSend = [
+                    'property'              => $record->property_name,
+                    'organization'          => $organization?->organization_name,
+                    'email'                 => $solicitante?->email,
+                    'customer_name'         => $customer?->full_name,
+                    'customer_national_id'  => $customer?->national_id,
+                    'offer_amount'          => $amount,
+                    'attachments'           => $attachments,
+                    'attachments_disk'      => 'azure_public',
+                    'url'                   => FilamentUrlHelper::getResourceUrl(
+                        $destinatario, // the recipient
+                        OfferResource::class,
+                        $record,
+                    ),
+                ];
+
+                Mail::to(new Address($destinatario->email))
+                    ->send(new OfferStatusMail($dataToSend, 'pending'));
+            }
+        }
+
+        // Copy to ventas
+        $ventasUsers = User::role('ventas')->get();
+        foreach ($ventasUsers as $destinatario) {
+            $dataVentas = $dataToSend;
+            $dataVentas['url'] = FilamentUrlHelper::getResourceUrl(
+                $destinatario,
+                OfferResource::class,
+                $record,
+            );
+
+            Mail::to(new Address($destinatario->email))
+                ->send(new OfferStatusMail($dataVentas, 'pending'));
         }
 
         // Also send to the requester (if they are a panel_user)

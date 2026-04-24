@@ -31,10 +31,11 @@ class CreateCustomerReport extends CreateRecord
         $customer = PersonalCustomer::find($record->personal_customer_id);
         $solicitante = $record->user;
 
-        // administrative users (primary recipients)
-        $userRoles = User::role(['soporte', 'ventas'])->get();
+        $iso2 = $solicitante?->country?->iso2;
 
-        foreach ($userRoles as $destinatario) {
+        if ($iso2 === 'PA' || $iso2 === 'SV') {
+            $supportEmail = $iso2 === 'PA' ? 'soportepa@g-easypro.com' : 'soportesv@g-easypro.com';
+
             $dataToSend = [
                 'property_name'         => $record->property_name,
                 'organization'          => $organization?->organization_name,
@@ -42,15 +43,37 @@ class CreateCustomerReport extends CreateRecord
                 'email'                 => $solicitante?->email,
                 'customer_name'         => $customer?->full_name,
                 'customer_national_id'  => $customer?->national_id,
-                'url'                   => FilamentUrlHelper::getResourceUrl(
-                    $destinatario, // the recipient
+                'url'                   => FilamentUrlHelper::getResourceUrlForPanel(
+                    'soporte',
                     CustomerReportResource::class,
                     $record,
                 ),
             ];
 
-            Mail::to(new Address($destinatario->email))
+            Mail::to(new Address($supportEmail))
                 ->send(new ReportStatusMail($dataToSend, 'pending'));
+        } else {
+            // administrative users (primary recipients)
+            $userRoles = User::role(['soporte', 'ventas'])->get();
+
+            foreach ($userRoles as $destinatario) {
+                $dataToSend = [
+                    'property_name'         => $record->property_name,
+                    'organization'          => $organization?->organization_name,
+                    'name'                  => $solicitante?->name,
+                    'email'                 => $solicitante?->email,
+                    'customer_name'         => $customer?->full_name,
+                    'customer_national_id'  => $customer?->national_id,
+                    'url'                   => FilamentUrlHelper::getResourceUrl(
+                        $destinatario, // the recipient
+                        CustomerReportResource::class,
+                        $record,
+                    ),
+                ];
+
+                Mail::to(new Address($destinatario->email))
+                    ->send(new ReportStatusMail($dataToSend, 'pending'));
+            }
         }
 
         // Also send to the requester (if they are a panel_user)

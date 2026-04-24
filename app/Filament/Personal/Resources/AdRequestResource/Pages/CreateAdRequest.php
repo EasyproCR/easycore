@@ -26,34 +26,32 @@ class CreateAdRequest extends CreateRecord
     {
         $record = $this->record;
         $solicitante = $record->user;
-        $userRoles = User::role(['rrhh'])->get();
+        $supportEmail = 'rrhh@g-easypro.com';
 
-        foreach ($userRoles as $destinatario) {
-            $dataToSend = [
-                'name'            => $solicitante?->name,
-                'email'           => $solicitante?->email,
-                'platform'        => $record->platform,
-                'start_date'      => $record->start_date,
-                'end_date'        => $record->end_date,
-                'url'             => FilamentUrlHelper::getResourceUrl(
-                    $destinatario,
-                    AdRequestResource::class,
-                    $record,
-                ),
-            ];
+        $dataToSend = [
+            'name' => $solicitante?->name,
+            'email' => $solicitante?->email,
+            'platform' => $record->platform,
+            'start_date' => $record->start_date,
+            'end_date' => $record->end_date,
+            'url' => FilamentUrlHelper::getResourceUrlForPanel(
+                'rrhh',
+                AdRequestResource::class,
+                $record,
+            ),
+        ];
 
-            Mail::to(new Address($destinatario->email))
-                ->send(new AdStatusMail($dataToSend, 'pending'));
-        }
+        Mail::to(new Address($supportEmail))
+            ->send(new AdStatusMail($dataToSend, 'pending'));
 
         if ($solicitante && $solicitante->hasRole('panel_user')) {
             $dataToSend = [
-                'name'            => $solicitante?->full_name,
-                'email'           => $solicitante?->email,
-                'platform'        => $record->platform,
-                'start_date'      => $record->start_date,
-                'end_date'        => $record->end_date,
-                'url'             => FilamentUrlHelper::getResourceUrl(
+                'name' => $solicitante?->full_name,
+                'email' => $solicitante?->email,
+                'platform' => $record->platform,
+                'start_date' => $record->start_date,
+                'end_date' => $record->end_date,
+                'url' => FilamentUrlHelper::getResourceUrl(
                     $solicitante,
                     AdRequestResource::class,
                     $record,
