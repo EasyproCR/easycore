@@ -63,8 +63,8 @@ class ServicesPanelProvider extends PanelProvider
             ])
             ->plugins([
                 PanelRoles::make()
-                ->roleToAssign('servicio_al_cliente')
-                ->restrictedRoles(['servicio_al_cliente']),
+                    ->roleToAssign('servicio_al_cliente')
+                    ->restrictedRoles(['servicio_al_cliente']),
                 FilamentApexChartsPlugin::make(),
                 FilamentEditProfilePlugin::make()
                     ->setIcon('heroicon-o-user')
@@ -80,9 +80,13 @@ class ServicesPanelProvider extends PanelProvider
                     ->label('Panel Personal')
                     ->url('/personal')
                     ->icon('heroicon-o-cog-6-tooth')
-                    ->visible(fn (): bool => auth()->user()?->hasAnyRole([
+                    ->visible(fn(): bool => auth()->user()?->hasAnyRole([
                         'servicio_al_cliente',
                     ])),
-            ]);
+            ])
+            ->renderHook(
+                'panels::body.end',
+                fn(): \Illuminate\Contracts\View\View => view('components.eva-widget'),
+            );
     }
 }
