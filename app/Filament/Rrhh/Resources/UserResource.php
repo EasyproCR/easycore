@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Rrhh\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Rrhh\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -95,12 +95,6 @@ class UserResource extends Resource
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->with(['roles']))
             ->columns([
-                ImageColumn::make('avatar_url')
-                    ->label(__('translate.user.avatar_url'))
-                    ->circular()
-                    ->alignCenter()
-                    ->height(50)
-                    ->width(50),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('translate.user.name'))
                     ->searchable()
