@@ -95,12 +95,9 @@ class UserResource extends Resource
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->with(['roles']))
             ->columns([
-                ImageColumn::make('avatar_url')
-                    ->label(__('translate.user.avatar_url'))
-                    ->circular()
-                    ->alignCenter()
-                    ->height(50)
-                    ->width(50),
+                Tables\Columns\TextColumn::make('code')
+                    ->label('Carnet')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('translate.user.name'))
                     ->searchable()

@@ -95,6 +95,9 @@ class UserResource extends Resource
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->with(['roles']))
             ->columns([
+                Tables\Columns\TextColumn::make('code')
+                    ->label('Carnet')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('translate.user.name'))
                     ->searchable()
